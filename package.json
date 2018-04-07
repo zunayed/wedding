@@ -1,8 +1,8 @@
 {
-  "name": "elecboard",
-  "description": "DIY electric skateboard",
+  "name": "wedding",
+  "description": "Wedding",
   "version": "1.0.0",
-  "author": "Zunayed Ali <zali@tower-research.com>",
+  "author": "Zunayed Ali <zunayed@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
