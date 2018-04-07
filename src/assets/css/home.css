@@ -1,0 +1,150 @@
+body {
+  background-color: #f5f4f0;
+}
+
+.container {
+  width: 940px !important;
+  padding: 0 !important;
+}
+
+.section {
+	margin-bottom:35px;
+}
+
+.header {
+	margin-bottom: 70px;
+}
+
+.page-title {
+	font-family: "Apercu Medium Italic", Calibri, sans-serif;
+	font-size-adjust: 0.508;
+	font-weight: 600;
+	font-style: italic;
+
+	color: #282825;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 48px;
+	margin-top: 30px;
+}
+
+.timberframing {
+    font-family: "Apercu Italic", Calibri, sans-serif;
+    font-size-adjust: 0.508;
+    font-weight: normal;
+    font-style: italic;
+
+    font-size: 36px;
+    color: #6ac9cd;
+    margin-bottom: 0px;
+}
+
+.icon {
+    text-align: center;
+	padding: 10px;
+	display:block;
+}
+
+.title {
+  color: #969292;
+  font-size: 16px;
+  text-align: center;
+  line-height: 14px;
+  display: block;
+}
+
+.section-title {
+  text-align: center;
+}
+
+/*
+journal area
+*/
+
+
+.widget {
+	padding: 12px;
+	width: 250px;
+	height: 320px;
+}
+
+.widget.top {
+	margin-bottom: 20px;
+}
+
+.widget.green {
+	background-color: #b1e2c9;
+}
+
+.widget.red {
+	background-color: rgba(231, 76, 60, 0.3);
+}
+
+.widget .line1 {
+	font-size-adjust: 0.508;
+	font-weight: normal;
+	font-style: normal;
+	display: block;
+}
+
+.widget .line2 {
+	font-size-adjust: 0.508;
+	font-weight: normal;
+	font-style: normal;
+
+	font-size: 24px;
+	color: #282825;
+	margin-bottom: 15px;
+}
+
+.widget .desc {
+    /*
+        FontDeck defaults
+    */
+    font-family: "Apercu Light", Calibri, sans-serif;
+    font-size-adjust: 0.508;
+    font-weight: 200;
+    font-style: normal;
+    line-height: 14px;
+
+    /*
+        Custom styling
+    */
+    color: #282825;
+    font-size: 12px;
+}
+
+.calendar-title {
+    /*
+        FontDeck defaults
+    */
+    font-family: "Apercu Italic", Calibri, sans-serif;
+    font-size-adjust: 0.508;
+    font-weight: normal;
+    font-style: italic;
+
+    /*
+        Custom styling
+    */
+    font-size: 24px;
+    color: #6ac9cd;
+}
+
+.calendar-desc {
+    /*
+        FontDeck defaults
+    */
+    font-family: "Apercu Light", Calibri, sans-serif;
+    font-size-adjust: 0.508;
+    font-weight: 200;
+    font-style: normal;
+    line-height: 1.2em;
+
+    /*
+        Custom styling
+    */
+    color: #282825;
+    font-size: 22px;
+}
+
+
