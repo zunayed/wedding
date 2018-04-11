@@ -5,6 +5,13 @@
     <div class="section row">
 
       <div class="col-12">
+         <img class="img-fluid" src="dist/images/top.png">
+      </div>
+
+    </div>
+    <div class="section row">
+
+      <div class="col-12">
          <img class="img-fluid" src="dist/images/us.png">
       </div>
 
