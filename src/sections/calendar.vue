@@ -1,6 +1,6 @@
 <template>
-  <div class="section row">
-    <div class="col-md-4">
+  <div v-if="person" class="section row">
+    <div v-if="canViewHolud" class="col-md-4">
         <div class="green widget">
           <span class="line1">Gaye Holud</span>
           <span class="line2">June 27</span>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class=" widget">
+        <div v-if="canViewWedding" class=" widget">
           <span class="line1">Wedding | Nikkah</span>
           <span class="line2">June 29</span>
           <span class="line1">Friday</span>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class="red widget">
+        <div v-if="canViewReception" class="red widget">
           <span class="line1">Reception</span>
           <span class="line2">June 31</span>
           <span class="line1">Sunday</span>
@@ -53,5 +53,19 @@
 </template>
 <script>
 export default {
+  props: [
+    'person'
+  ],
+  computed: {
+    canViewHolud() {
+      return this.person.holud > 0;
+    },
+    canViewWedding() {
+      return this.person.wedding > 0;
+    },
+    canViewReception() {
+      return this.person.reception > 0;
+    }
+  },
 };
 </script>
