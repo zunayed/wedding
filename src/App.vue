@@ -75,17 +75,6 @@ export default {
     }
   },
   created() {
-    Papa.parse('dist/wedding_list.csv', {
-      header: true,
-      download: true,
-      complete: (results, file) => {
-        console.log("Parsing complete:", results, file);
-        this.options = results.data;
-        console.log(this.options);
-      }
-    });
-
-
     firebase.initializeApp({
       apiKey: process.env.FB_KEY,
       authDomain: 'dtostillwell.com',
@@ -93,19 +82,17 @@ export default {
     });
 
     // initialize attendees from canonical source
-    // this.getCanonicalAttendees().then(attendees => {
-    //   this.options = attendees;
-    // });
+    this.getWeddingList().then(attendees => {
+      this.options = attendees;
+    });
   },
   methods: {
-    getCanonicalAttendees() {
-      return Promise.resolve([
-        { name: 'Kemal Gafar', holud: 1, wedding: 1, reception: 2 },
-        { name: 'Shahbaz Shah', holud: 2, wedding: 2, reception: 2 },
-        { name: 'Tasmiya Khan', holud: 2, wedding: 2, reception: 2 },
-        { name: 'Sara Nik', holud: 2, wedding: 2, reception: 2 },
-        { name: 'fob uncle', holud: 0, wedding: 0, reception: 2 },
-      ]);
+    getWeddingList() {
+      return new Promise(resolve => Papa.parse('dist/wedding_list.csv', {
+        header: true,
+        download: true,
+        complete: results => resolve(results.data),
+      }));
     },
   },
 }
