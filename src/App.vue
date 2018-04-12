@@ -37,31 +37,9 @@
 
       <div v-if="person">
         <br/>
-        <label class="typo__label">Which events can you make it to?</label>
-				<form>
-					<div v-for="event in Object.keys(eventLabels)" class="form-row align-items-center">
-						<div v-if="canView(event)" class="col-auto my-1">
-							<span class="custom-control-description" v-text="`I am planning to go to ${eventLabels[event]}${canHaveGuests(event) ? ' with' : ''}`"></span>
-						</div>
-
-						<div v-if="canHaveGuests(event)" class="col-auto my-1">
-							<select v-model="rsvp[event]" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                <option
-                  v-for="option in getGuestOptions(event)"
-                  v-bind:value="option.value">
-                  {{ option.label }}
-                </option>
-							</select>
-            </div>
-            <span v-if="canHaveGuests(event)"> guest(s).</span>
-
-					</div>
-				</form>
-
+				<rsvp-form :person="person"></rsvp-form>
         <br/>
         <button type="submit" class="btn btn-primary my-1">Send RSVP</button>
-
-
       </div>
     </p>
 	</div>
@@ -81,13 +59,14 @@ import Papa           from 'papaparse';
 
 
 import Calendar     	from "./sections/calendar.vue"
-
+import RsvpForm       from "./sections/rsvp-form.vue"
 
 export default {
   name: 'app',
   components: {
     "calendar": Calendar,
     "multiselect": VueMultiselect,
+    "rsvp-form": RsvpForm,
   },
   data() {
     return {
@@ -95,20 +74,7 @@ export default {
       options: [],
     }
   },
-  computed: {
-    canViewHolud() {
-      return this.canView('holud');
-    },
-    canViewWedding() {
-      return this.canView('wedding');
-    },
-    canViewReception() {
-      return this.canView('reception');
-    }
-  },
   created() {
-    var csvData = null;
-
     Papa.parse('dist/wedding_list.csv', {
       header: true,
       download: true,
@@ -132,24 +98,6 @@ export default {
     // });
   },
   methods: {
-    canView(event) {
-      return this.person[event] > 0;
-    },
-    canHaveGuests(event) {
-      return this.person[event] > 1;
-    },
-    getRsvp(person) {
-      return this.db.collection("zu_rsvp").doc(person.name).get().then(doc => {
-        return doc.exists ? doc.data() : {
-          holud: 0,
-          wedding: 0,
-          reception: 0,
-        };
-      }).then(rsvp => {
-        console.log('rsvp for', person.name, rsvp);
-        return rsvp;
-      })
-    },
     getCanonicalAttendees() {
       return Promise.resolve([
         { name: 'Kemal Gafar', holud: 1, wedding: 1, reception: 2 },
@@ -159,15 +107,6 @@ export default {
         { name: 'fob uncle', holud: 0, wedding: 0, reception: 2 },
       ]);
     },
-    getGuestOptions(event) {
-      const guestOptions = [
-        {value: 0, label: 'Please select...'}
-      ];
-      for (let i = 1; i <= this.person[event]; i++) {
-        guestOptions.push({value: i, label: i});
-      }
-      return guestOptions;
-    }
   },
 }
 </script>
