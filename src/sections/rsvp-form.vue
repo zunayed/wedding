@@ -4,7 +4,7 @@
     <div
       v-for="event in Object.keys(eventLabels)"
       v-if="canView(event)"
-      class="form-row align-i tems-center"
+      class="form-row align-items-center"
     >
       <div class="col-auto my-1">
         <span class="custom-control-description" v-text="`I am planning to go to ${eventLabels[event]}${canHaveGuests(event) ? ' with' : ''}`"></span>
