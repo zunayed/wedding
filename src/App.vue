@@ -98,9 +98,11 @@
 </template>
 
 <script>
+import firestore 			from 'firebase'
 import VueMultiselect from 'vue-multiselect';
 
-import Calendar     from "./sections/calendar.vue"
+import Calendar     	from "./sections/calendar.vue"
+
 
 export default {
   name: 'app',
@@ -131,7 +133,30 @@ export default {
       return this.person.reception > 0;
     }
   },
+  created() {
+    console.log('created');
+    firebase.initializeApp({
+      apiKey: 'FILL ME',
+      authDomain: 'dtostillwell.com',
+      projectId: 'blog-741dd'
+    });
 
+    // Initialize Cloud Firestore through Firebase
+    var db = firebase.firestore();
+		var personDoc = db.collection("zu_rsvp").doc("Zunayed Ali");
+
+		personDoc.get().then(function(doc) {
+			if (doc.exists) {
+				console.log("Document data:", doc.data());
+			} else {
+				// doc.data() will be undefined in this case
+				console.log("No such document!");
+			}
+		}).catch(function(error) {
+			console.log("Error getting document:", error);
+		});
+
+  },
 }
 </script>
 
