@@ -35,7 +35,6 @@
         track-by="name">
       </multiselect>
 
-
       <div v-if="person">
         <br/>
         <label class="typo__label">Which events can you make it to?</label>
@@ -98,8 +97,11 @@
 </template>
 
 <script>
-import firestore 			from 'firebase'
+import firestore 			from 'firebase';
 import VueMultiselect from 'vue-multiselect';
+import Papa           from 'papaparse';
+
+
 
 import Calendar     	from "./sections/calendar.vue"
 
@@ -113,13 +115,7 @@ export default {
   data () {
     return {
       person: null,
-      options: [
-        { name: 'Kemal Gafar', holud: 1, wedding: 1, reception: 2 },
-        { name: 'Shahbaz Shah', holud: 2, wedding: 2, reception: 2 },
-        { name: 'Tasmiya Khan', holud: 2, wedding: 2, reception: 2 },
-        { name: 'Sara Nik', holud: 2, wedding: 2, reception: 2 },
-        { name: 'fob uncle', holud: 0, wedding: 0, reception: 2 },
-      ]
+      options: [],
     }
   },
   computed: {
@@ -134,6 +130,19 @@ export default {
     }
   },
   created() {
+    var csvData = null;
+
+    Papa.parse('dist/wedding_list.csv', {
+      header: true,
+      download: true,
+      complete: (results, file) => {
+        console.log("Parsing complete:", results, file);
+        this.options = results.data;
+        console.log(this.options);
+      }
+    });
+
+
     firebase.initializeApp({
       apiKey: process.env.FB_KEY,
       authDomain: 'dtostillwell.com',
