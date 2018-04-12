@@ -31,7 +31,7 @@
       <multiselect
         v-model="person"
         :options="options"
-        label="name"
+        :custom-label="nameWithNickName"
         track-by="name">
       </multiselect>
 
@@ -163,8 +163,16 @@ export default {
 		}).catch(function(error) {
 			console.log("Error getting document:", error);
 		});
-
   },
+  methods: {
+    nameWithNickName ({ name, nickname }) {
+      if (!nickname) {
+        return name;
+      }
+
+      return `${name} — [${nickname}]`
+    }
+  }
 }
 </script>
 
