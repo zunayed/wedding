@@ -134,9 +134,8 @@ export default {
     }
   },
   created() {
-    console.log('created');
     firebase.initializeApp({
-      apiKey: 'FILL ME',
+      apiKey: process.env.FB_KEY,
       authDomain: 'dtostillwell.com',
       projectId: 'blog-741dd'
     });

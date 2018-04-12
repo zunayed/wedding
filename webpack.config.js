@@ -2,6 +2,12 @@ var path = require('path')
 var webpack = require('webpack')
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+require('dotenv').config({
+    path: `${__dirname}/../../config/.env`
+});
+
+process = require('process')
+
 module.exports = {
   entry: './src/main.js',
   output: {
@@ -61,13 +67,24 @@ module.exports = {
   devtool: '#eval-source-map'
 }
 
+if (process.env.NODE_ENV === 'development') {
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        FB_KEY: `"${process.env.FB_KEY}"`,
+      }
+    }),
+  ])
+}
+
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '"production"',
+        FB_KEY: `"${process.env.FB_KEY}"`,
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
