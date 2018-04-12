@@ -38,45 +38,22 @@
       <div v-if="person">
         <br/>
         <label class="typo__label">Which events can you make it to?</label>
-
 				<form>
-					<div class="form-row align-items-center">
-						<div class="col-auto my-1">
-							<div class="custom-control mr-sm-2">
-								<input type="checkbox" class="custom-control-input">
-								<label class="custom-control-label">I am planning to go to Gay holud with</label>
-							</div>
+					<div v-for="event in Object.keys(eventLabels)" class="form-row align-items-center">
+						<div v-if="canView(event)" class="col-auto my-1">
+							<span class="custom-control-description" v-text="`I am planning to go to ${eventLabels[event]}${canHaveGuests(event) ? ' with' : ''}`"></span>
 						</div>
 
-						<div class="col-auto my-1">
-							<select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-								<option selected>Please select...</option>
-                <option v-for="num in [1, 2, 3]">{{ num }}</option>
+						<div v-if="canHaveGuests(event)" class="col-auto my-1">
+							<select v-model="rsvp[event]" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                <option
+                  v-for="option in getGuestOptions(event)"
+                  v-bind:value="option.value">
+                  {{ option.label }}
+                </option>
 							</select>
             </div>
-
-            guest(s).
-
-					</div>
-				</form>
-
-				<form>
-					<div class="form-row align-items-center">
-						<div class="col-auto my-1">
-							<div class="custom-control mr-sm-2">
-								<input type="checkbox" class="custom-control-input">
-								<label class="custom-control-label">I am planning to go to Gay holud with</label>
-							</div>
-						</div>
-
-						<div class="col-auto my-1">
-							<select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-								<option selected>Please select...</option>
-                <option v-for="num in [1, 2, 3]">{{ num }}</option>
-							</select>
-            </div>
-
-            guest(s).
+            <span v-if="canHaveGuests(event)"> guest(s).</span>
 
 					</div>
 				</form>
@@ -112,7 +89,7 @@ export default {
     "calendar": Calendar,
     "multiselect": VueMultiselect,
   },
-  data () {
+  data() {
     return {
       person: null,
       options: [],
@@ -120,13 +97,13 @@ export default {
   },
   computed: {
     canViewHolud() {
-      return this.person.holud > 0;
+      return this.canView('holud');
     },
     canViewWedding() {
-      return this.person.wedding > 0;
+      return this.canView('wedding');
     },
     canViewReception() {
-      return this.person.reception > 0;
+      return this.canView('reception');
     }
   },
   created() {
@@ -146,24 +123,51 @@ export default {
     firebase.initializeApp({
       apiKey: process.env.FB_KEY,
       authDomain: 'dtostillwell.com',
-      projectId: 'blog-741dd'
+      projectId: 'blog-741dd',
     });
 
-    // Initialize Cloud Firestore through Firebase
-    var db = firebase.firestore();
-		var personDoc = db.collection("zu_rsvp").doc("Zunayed Ali");
-
-		personDoc.get().then(function(doc) {
-			if (doc.exists) {
-				console.log("Document data:", doc.data());
-			} else {
-				// doc.data() will be undefined in this case
-				console.log("No such document!");
-			}
-		}).catch(function(error) {
-			console.log("Error getting document:", error);
-		});
-
+    // initialize attendees from canonical source
+    // this.getCanonicalAttendees().then(attendees => {
+    //   this.options = attendees;
+    // });
+  },
+  methods: {
+    canView(event) {
+      return this.person[event] > 0;
+    },
+    canHaveGuests(event) {
+      return this.person[event] > 1;
+    },
+    getRsvp(person) {
+      return this.db.collection("zu_rsvp").doc(person.name).get().then(doc => {
+        return doc.exists ? doc.data() : {
+          holud: 0,
+          wedding: 0,
+          reception: 0,
+        };
+      }).then(rsvp => {
+        console.log('rsvp for', person.name, rsvp);
+        return rsvp;
+      })
+    },
+    getCanonicalAttendees() {
+      return Promise.resolve([
+        { name: 'Kemal Gafar', holud: 1, wedding: 1, reception: 2 },
+        { name: 'Shahbaz Shah', holud: 2, wedding: 2, reception: 2 },
+        { name: 'Tasmiya Khan', holud: 2, wedding: 2, reception: 2 },
+        { name: 'Sara Nik', holud: 2, wedding: 2, reception: 2 },
+        { name: 'fob uncle', holud: 0, wedding: 0, reception: 2 },
+      ]);
+    },
+    getGuestOptions(event) {
+      const guestOptions = [
+        {value: 0, label: 'Please select...'}
+      ];
+      for (let i = 1; i <= this.person[event]; i++) {
+        guestOptions.push({value: i, label: i});
+      }
+      return guestOptions;
+    }
   },
 }
 </script>
