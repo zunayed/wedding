@@ -6,11 +6,16 @@
       v-if="canView(event)"
       class="form-row align-items-center"
     >
-      <div class="col-auto my-1">
-        <span class="custom-control-description" v-text="`I am planning to go to ${eventLabels[event]}${canHaveGuests(event) ? ' with' : ''}`"></span>
+      <div class="col-auto" v-html="eventLabels[event]"></div>
+
+      <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example"></div>
+        <button type="button" v-on:click="setCanAttend(event, false)" v-bind:class="`btn btn-${rsvp[event].canAttend ? 'secondary': 'primary'}`">I can’t make it!</button>
+        <button type="button" v-on:click="setCanAttend(event, true)" v-bind:class="`btn btn-${rsvp[event].canAttend ? 'primary': 'secondary'}`">I’ll be attending</button>
       </div>
-      <div v-if="canHaveGuests(event)" class="col-auto my-1">
-        <select v-model="rsvp[event]" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+      <div v-if="rsvp[event].canAttend" class="col-auto my-1">
+        <p>The total number of guest attending including myself is</p>
+        <select v-model="rsvp[event].total" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
           <option
             v-for="option in getGuestOptions(event)"
             v-bind:value="option.value"
@@ -35,9 +40,18 @@ export default {
       reception: 'Reception',
     },
     rsvp: {
-      holud: 0,
-      wedding: 0,
-      reception: 0,
+      holud: {
+        canAttend: false,
+        total: 0,
+      },
+      wedding: {
+        canAttend: false,
+        total: 0,
+      },
+      reception: {
+        canAttend: false,
+        total: 0,
+      },
     },
   }),
   props: [
@@ -56,6 +70,10 @@ export default {
     this.db = firebase.app().firestore();
   },
   methods: {
+    setCanAttend(event, canAttend) {
+      console.log('clicked', event, canAttend);
+      this.rsvp[event].canAttend = canAttend;
+    },
     canView(event) {
       return this.person[event] > 0;
     },
@@ -73,10 +91,36 @@ export default {
     },
     getRsvp(person) {
       return this.db.collection("zu_rsvp").doc(person.name).get().then(doc => {
-        return doc.exists ? doc.data() : {
-          holud: 0,
-          wedding: 0,
-          reception: 0,
+        if (!doc.exists) {
+          return {
+            holud: {
+              total: 0,
+              canAttend: false,
+            },
+            wedding: {
+              total: 0,
+              canAttend: false,
+            },
+            reception: {
+              total: 0,
+              canAttend: false,
+            },
+          }
+        };
+        const rsvp = doc.data();
+        return {
+          holud: {
+            total: rsvp.holud,
+            canAttend: rsvp.holud > 0,
+          },
+          wedding: {
+            total: rsvp.wedding,
+            canAttend: rsvp.wedding > 0,
+          },
+          reception: {
+            total: rsvp.reception,
+            canAttend: rsvp.reception > 0,
+          },
         };
       });
     },
