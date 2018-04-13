@@ -37,54 +37,7 @@
 
       <div v-if="person">
         <br/>
-        <label class="typo__label">Which events can you make it to?</label>
-
-				<form>
-					<div class="form-row align-items-center">
-						<div class="col-auto my-1">
-							<div class="custom-control mr-sm-2">
-								<input type="checkbox" class="custom-control-input">
-								<label class="custom-control-label">I am planning to go to Gay holud with</label>
-							</div>
-						</div>
-
-						<div class="col-auto my-1">
-							<select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-								<option selected>Please select...</option>
-                <option v-for="num in [1, 2, 3]">{{ num }}</option>
-							</select>
-            </div>
-
-            guest(s).
-
-					</div>
-				</form>
-
-				<form>
-					<div class="form-row align-items-center">
-						<div class="col-auto my-1">
-							<div class="custom-control mr-sm-2">
-								<input type="checkbox" class="custom-control-input">
-								<label class="custom-control-label">I am planning to go to Gay holud with</label>
-							</div>
-						</div>
-
-						<div class="col-auto my-1">
-							<select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-								<option selected>Please select...</option>
-                <option v-for="num in [1, 2, 3]">{{ num }}</option>
-							</select>
-            </div>
-
-            guest(s).
-
-					</div>
-				</form>
-
-        <br/>
-        <button type="submit" class="btn btn-primary my-1">Send RSVP</button>
-
-
+				<rsvp-form :person="person"></rsvp-form>
       </div>
     </p>
 	</div>
@@ -104,65 +57,40 @@ import Papa           from 'papaparse';
 
 
 import Calendar     	from "./sections/calendar.vue"
-
+import RsvpForm       from "./sections/rsvp-form.vue"
 
 export default {
   name: 'app',
   components: {
     "calendar": Calendar,
     "multiselect": VueMultiselect,
+    "rsvp-form": RsvpForm,
   },
-  data () {
+  data() {
     return {
       person: null,
       options: [],
     }
   },
-  computed: {
-    canViewHolud() {
-      return this.person.holud > 0;
-    },
-    canViewWedding() {
-      return this.person.wedding > 0;
-    },
-    canViewReception() {
-      return this.person.reception > 0;
-    }
-  },
   created() {
-    var csvData = null;
-
-    Papa.parse('dist/wedding_list.csv', {
-      header: true,
-      download: true,
-      complete: (results, file) => {
-        console.log("Parsing complete:", results, file);
-        this.options = results.data;
-        console.log(this.options);
-      }
-    });
-
-
     firebase.initializeApp({
       apiKey: process.env.FB_KEY,
       authDomain: 'dtostillwell.com',
-      projectId: 'blog-741dd'
+      projectId: 'blog-741dd',
     });
-
-    // Initialize Cloud Firestore through Firebase
-    var db = firebase.firestore();
-		var personDoc = db.collection("zu_rsvp").doc("Zunayed Ali");
-
-		personDoc.get().then(function(doc) {
-			if (doc.exists) {
-				console.log("Document data:", doc.data());
-			} else {
-				// doc.data() will be undefined in this case
-				console.log("No such document!");
-			}
-		}).catch(function(error) {
-			console.log("Error getting document:", error);
-		});
+    // initialize attendees from canonical source
+    this.getWeddingList().then(attendees => {
+      this.options = attendees;
+    });
+  },
+  methods: {
+    getWeddingList() {
+      return new Promise(resolve => Papa.parse('dist/wedding_list.csv', {
+        header: true,
+        download: true,
+        complete: results => resolve(results.data),
+      }));
+    },
   },
   methods: {
     nameWithNickName ({ name, nickname }) {
