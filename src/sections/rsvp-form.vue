@@ -26,7 +26,7 @@
       </div>
     </div>
     <br/>
-    <button type="submit" class="btn btn-primary my-1">Send RSVP</button>
+    <button v-on:click.prevent="setRsvp" class="btn btn-primary my-1">Send RSVP</button>
   </form>
 </template>
 
@@ -69,10 +69,12 @@ export default {
   },
   created() {
     this.db = firebase.app().firestore();
+    this.getRsvp(this.person).then(rsvp => {
+      this.rsvp = rsvp;
+    });
   },
   methods: {
     setCanAttend(event, canAttend) {
-      console.log('clicked', event, canAttend);
       this.rsvp[event].canAttend = canAttend;
     },
     canView(event) {
@@ -125,6 +127,19 @@ export default {
         };
       });
     },
+    setRsvp() {
+      this.db.collection("zu_rsvp").doc(this.person.name).set({
+          holud: this.rsvp.holud.total,
+          wedding: this.rsvp.wedding.total,
+          reception: this.rsvp.reception.total,
+      })
+      .then(function() {
+          console.log("Document successfully written!");
+      })
+      .catch(function(error) {
+          console.error("Error writing document: ", error);
+      });
+    }
   },
 };
 </script>
