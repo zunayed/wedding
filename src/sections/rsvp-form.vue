@@ -26,6 +26,8 @@
       </div>
       <span v-if="canHaveGuests(event)"> guest(s).</span>
     </div>
+    <br/>
+    <button type="submit" class="btn btn-primary my-1">Send RSVP</button>
   </form>
 </template>
 

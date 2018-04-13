@@ -38,8 +38,6 @@
       <div v-if="person">
         <br/>
 				<rsvp-form :person="person"></rsvp-form>
-        <br/>
-        <button type="submit" class="btn btn-primary my-1">Send RSVP</button>
       </div>
     </p>
 	</div>
