@@ -31,7 +31,7 @@
       <multiselect
         v-model="person"
         :options="options"
-        label="name"
+        :custom-label="nameWithNickName"
         track-by="name">
       </multiselect>
 
@@ -78,7 +78,6 @@ export default {
       authDomain: 'dtostillwell.com',
       projectId: 'blog-741dd',
     });
-
     // initialize attendees from canonical source
     this.getWeddingList().then(attendees => {
       this.options = attendees;
@@ -93,6 +92,15 @@ export default {
       }));
     },
   },
+  methods: {
+    nameWithNickName ({ name, nickname }) {
+      if (!nickname) {
+        return name;
+      }
+
+      return `${name} — [${nickname}]`
+    }
+  }
 }
 </script>
 
