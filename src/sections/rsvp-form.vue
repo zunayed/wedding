@@ -5,28 +5,43 @@
       v-for="event in Object.keys(eventLabels)"
       v-if="canView(event)"
       class="form-row align-items-center"
-    >
-      <div class="col-auto" v-html="eventLabels[event]"></div>
+      >
+      <div class="col-2">
+        <b>{{ eventLabels[event] }}</b>
+      </div>
 
       <div class="col-auto">
         <div class="btn-group" role="group" aria-label="Basic example"></div>
         <button type="button" v-on:click="setCanAttend(event, false)" v-bind:class="`btn btn-${rsvp[event].canAttend ? 'secondary': 'primary'}`">I can’t make it!</button>
         <button type="button" v-on:click="setCanAttend(event, true)" v-bind:class="`btn btn-${rsvp[event].canAttend ? 'primary': 'secondary'}`">I’ll be attending</button>
       </div>
+      <br/>
       <div v-if="rsvp[event].canAttend" class="col-auto my-1">
-        <p>The total number of guest attending including myself is</p>
+        <p>The total number of guest attending including myself is
         <select v-model="rsvp[event].total" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
           <option
             v-for="option in getGuestOptions(event)"
             v-bind:value="option.value"
             v-text="option.label"
-          >
+            >
           </option>
         </select>
+      </p>
       </div>
+    <br/>
     </div>
     <br/>
-    <button v-on:click.prevent="setRsvp" class="btn btn-primary my-1">Send RSVP</button>
+    <button v-on:click.prevent="setRsvp" class="btn btn-primary my-1">Send/Update RSVP</button>
+
+    <br/>
+    <br/>
+
+    <transition name="fade">
+      <div v-if="sentResponse "class="alert alert-primary" role="alert">
+        We have recorded rsvp response! Thanks!
+      </div>
+    </transition>
+
   </form>
 </template>
 
@@ -37,7 +52,7 @@ export default {
   data: () => ({
     eventLabels: {
       holud: 'Gaye Holud',
-      wedding: 'Nikkah',
+      wedding: 'Wedding',
       reception: 'Reception',
     },
     rsvp: {
@@ -54,12 +69,16 @@ export default {
         total: 0,
       },
     },
+    sentResponse: false,
+    failRequest: false,
   }),
   props: [
     'person'
   ],
   watch: {
     person(value) {
+      this.sentResponse = false;
+
       if (value) {
         this.getRsvp(value).then(rsvp => {
           this.rsvp = rsvp;
@@ -110,7 +129,11 @@ export default {
             },
           }
         };
+
         const rsvp = doc.data();
+        console.info(doc.data());
+        this.sentResponse = true;
+
         return {
           holud: {
             total: rsvp.holud,
@@ -125,6 +148,7 @@ export default {
             canAttend: rsvp.reception > 0,
           },
         };
+
       });
     },
     setRsvp() {
@@ -133,13 +157,25 @@ export default {
           wedding: this.rsvp.wedding.total,
           reception: this.rsvp.reception.total,
       })
-      .then(function() {
-          console.log("Document successfully written!");
+        .then( () => {
+        console.log("Document successfully written!");
+        this.sentResponse = true;
+
       })
       .catch(function(error) {
-          console.error("Error writing document: ", error);
+        console.error("Error writing document: ", error);
+        this.failRequest = true;
       });
     }
   },
 };
 </script>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

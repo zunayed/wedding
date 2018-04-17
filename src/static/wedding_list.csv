@@ -1,4 +1,4 @@
-Group,name,nickname,Address,City,Number of Guests to Invite,holud,nikkah,reception,Notes
+Group,name,nickname,Address,City,Number of Guests to Invite,holud,wedding,reception,Notes
 ,Mr. & Mrs. Abdul Khalik ,Juni Brother ,93-04 Francis Lewis Blvd.,"Queens Village, NY 11428",2,0,0,2,
 ,Mr. & Mrs. Abdullah Al-Tariq & Family ,Shopon,236 Fencsak Avenue,"Elmwood Park, NJ 07407",2,0,0,2,
 ,Mr. & Mrs. Nurul Haque & Family,Nuru Chacha,85-25 120th Street Apt. 3F,"Kew Garden, NY 11415",3,0,0,3,
@@ -204,7 +204,7 @@ Naju's Family,Drs. Brian and Syeda Pultz,,15 Sagamore Drive,"Syosset, NY 11791",
 ,Mr. & Mrs. Amit Patel,,132 Main Street,"Vernon, CT 06066",2,2,2,2,(not coming) 
 ,Mr. & Mrs. Valdes,Romita,40 Cody Circle South ,Windsor CT 06074,2,0,2,0,(most likely not pregnant)
 ,Mr. & Mrs. Mohid Khan and Family ,Nazia and Ziad,9722 New Kent Drive ,"Sugar Land, TX 7748",4,4,4,4,(Mohid/Nonni likely not coming)
-,Mr. Rushdan Islam,,,,1,1,1,1,
+,Mr. Rushdan Islam,,,,1,1,1,2,
 ,Mrs. Shamsun Islam,,,,1,1,1,1,
 ,Ms. Katrina Bandong + Guest ,,7281 113th St. Apt 5U,"Forest Hills, NY 11375",2,0,2,0,
 ,Mr. Wasay Mujtaba ,,530 East 89th St. Apt 4K ,"New York, NY 10128",1,1,0,1,

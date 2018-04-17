@@ -4,15 +4,15 @@
 
     <div class="section row">
 
-      <div class="col-12">
-         <img class="img-fluid" src="dist/images/top.png">
+      <div class="col-sm-12">
+        <img class="img-fluid" src="dist/images/top.png">
       </div>
 
     </div>
     <div class="section row">
 
-      <div class="col-12">
-         <img class="img-fluid" src="dist/images/us.png">
+      <div class="col-sm-12">
+        <img class="img-fluid" src="dist/images/us.png">
       </div>
 
     </div>
@@ -20,31 +20,37 @@
     <hr/>
     <br/>
 
-	<div class="alert alert-success" role="alert">
-	  <h4 class="alert-heading">Please RSVP!</h4>
-    <p>Thanks for visiting our wedding website! Please take a second to rsvp for the events! If you don't see your name reach out to us email:zunayed@gmail.com</p>
+    <div class="section row">
+      <div class="col-sm-12">
 
-    <hr>
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Please RSVP!</h4>
+          <p>Thanks for visiting our wedding website! Please take a second to rsvp for the events! If you don't see your name reach out to us email:zunayed@gmail.com</p>
 
-    <p class="mb-0">
-      <label class="typo__label">What's your name?</label>
-      <multiselect
-        v-model="person"
-        :options="options"
-        :custom-label="nameWithNickName"
-        track-by="name">
-      </multiselect>
+          <hr>
 
-      <div v-if="person">
-        <br/>
-				<rsvp-form :person="person"></rsvp-form>
+          <p class="mb-0">
+            <label class="typo__label">What's your name?</label>
+            <multiselect
+              v-model="person"
+              :options="options"
+              :custom-label="nameWithNickName"
+              track-by="name">
+            </multiselect>
+
+            <div v-if="person">
+              <br/>
+              <rsvp-form :person="person"></rsvp-form>
+            </div>
+          </p>
+        </div>
+
+        <hr>
+
+        <calendar :person="person"></calendar>
+
       </div>
-    </p>
-	</div>
-
-  <hr>
-
-	<calendar :person="person"></calendar>
+    </div>
 
   </div>
 </template>
@@ -91,8 +97,6 @@ export default {
         complete: results => resolve(results.data),
       }));
     },
-  },
-  methods: {
     nameWithNickName ({ name, nickname }) {
       if (!nickname) {
         return name;
