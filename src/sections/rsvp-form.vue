@@ -95,6 +95,9 @@ export default {
   methods: {
     setCanAttend(event, canAttend) {
       this.rsvp[event].canAttend = canAttend;
+      if (!canAttend) {
+        this.rsvp[event].total = 0;
+      }
     },
     canView(event) {
       return this.person[event] > 0;
