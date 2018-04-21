@@ -12,7 +12,7 @@
     <div class="section row">
 
       <div class="col-sm-12">
-        <img class="img-fluid" src="dist/images/us.png">
+        <img class="img-fluid" src="dist/images/suzu.png">
       </div>
 
     </div>
@@ -86,6 +86,20 @@ export default {
     });
     // initialize attendees from canonical source
     this.getWeddingList().then(attendees => {
+      attendees.sort(function(a, b) {
+          var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+          var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+                return -1;
+              }
+          if (nameA > nameB) {
+                return 1;
+              }
+
+          // names must be equal
+          return 0;
+      });
+
       this.options = attendees;
     });
   },
