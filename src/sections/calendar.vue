@@ -35,7 +35,7 @@
     <div class="col-md-4">
         <div v-if="canViewReception" class="red widget">
           <span class="line1">Reception</span>
-          <span class="line2">June 31</span>
+          <span class="line2">July 01</span>
           <span class="line1">Sunday</span>
           <hr/>
           <p >
